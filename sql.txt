@@ -1,0 +1,41 @@
+drop table member;
+drop table post;
+drop table comments;
+
+
+drop sequence post_seq;
+drop sequence comments_seq;
+
+create sequence post_seq;
+create sequence comments_seq;
+
+create table member (
+	username varchar2(10 char),
+	password varchar2(60 char) ,
+	email varchar2(30 char),
+	join_day date,
+	-- 이미지를 base64인코딩해서 저장
+	profile clob,
+	constraint member_pk_username primary key(username)
+);
+
+create table post (
+	pno number(6),
+	title varchar2(50 char),
+	content clob,
+	write_time date,
+	writer varchar2(10 char),
+	read_cnt number(6),
+	constraint post_pk_pno primary key(pno)
+);
+
+create table comments (
+	cno number(6),
+	content varchar2(100 char),
+	write_time date,
+	writer varchar2(10 char),
+	pno number(6),
+	constraint comments_pk_cno primary key(cno),
+    constraint comments_fk_pno foreign key(pno) references post(pno)
+);
+
