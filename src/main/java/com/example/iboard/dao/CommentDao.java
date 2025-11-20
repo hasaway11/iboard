@@ -11,11 +11,11 @@ public interface CommentDao {
   int save(Comment comment);
 
   @Select("select * from comments where pno=#{pno} order by cno desc")
-  List<Comment> findByPno(int pno);
+  List<Comment> findByPno(long pno);
 
   @Delete("delete from comments where pno=#{pno}")
-  int deleteByPno(int pno);
+  long deleteByPno(long pno);
 
   @Delete("delete from comments where cno=#{cno} and writer=#{writer} and rownum=1")
-  int deleteByCnoAndWriter(int cno, String writer);
+  long deleteByCnoAndWriter(long cno, String writer);
 }

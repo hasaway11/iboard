@@ -23,4 +23,8 @@ public class Post {
     this.content = content;
     this.writer = writer;
   }
+
+  public void increaseReadCnt() {
+    this.readCnt++;
+  }
 }

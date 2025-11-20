@@ -1,6 +1,5 @@
 package com.example.iboard.dto;
 
-import com.example.demo.entity.*;
 import com.example.iboard.entity.*;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
@@ -57,8 +56,16 @@ public class PostDto {
     @JsonFormat(pattern="yyyy년 MM월 dd일 hh:mm:ss")
     private LocalDateTime writeTime;
     private long readCnt;
-    private long goodCnt;
-    private long badCnt;
     private List<Comment> comments;
+
+    public Read(Post post, List<Comment> comments) {
+      this.pno = post.getPno();
+      this.title = post.getTitle();
+      this.content = post.getContent();
+      this.writer = post.getWriter();
+      this.writeTime = post.getWriteTime();
+      this.readCnt = post.getReadCnt();
+      this.comments = comments;
+    }
   }
 }

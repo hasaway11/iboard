@@ -1,8 +1,7 @@
 package com.example.iboard.security;
 
-
-import com.example.demo.dao.*;
-import com.example.demo.entity.*;
+import com.example.iboard.dao.*;
+import com.example.iboard.entity.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
@@ -15,11 +14,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Member m = memberDao.loadLoginData(username).orElseThrow(()->new UsernameNotFoundException("사용자가 없습니다"));
-    // 아이디, 비밀번호, 권한, 계정블록여부 등을 담은 스프링 시큐리티 표준 UserDetails를 리턴
-    UserDetails user = User.builder().username(m.getUsername()).password(m.getPassword()).roles(m.getRole().name())
-        .accountLocked(m.isLock()).build();
-    return User.builder().username(m.getUsername()).password(m.getPassword()).roles(m.getRole().name())
-        .accountLocked(m.isLock()).build();
+    Member m = memberDao.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("사용자가 없습니다"));
+    // 아이디, 비밀번호, 권한을 담은 스프링 시큐리티 표준 UserDetails를 리턴
+    return User.builder().username(m.getUsername()).password(m.getPassword()).roles("USER").build();
   }
 }

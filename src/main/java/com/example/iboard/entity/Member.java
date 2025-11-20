@@ -15,6 +15,7 @@ public class Member {
   @JsonIgnore
   private String password;
   private String email;
+  @JsonIgnore
   private String profile;
   private LocalDate joinDay = LocalDate.now();
 
@@ -30,10 +31,3 @@ public class Member {
     return new MemberDto.Read(username, email, profile, joinDay, days);
   }
 }
-
-
-
-
-
-
-

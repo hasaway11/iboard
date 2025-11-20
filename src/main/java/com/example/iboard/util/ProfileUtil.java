@@ -1,4 +1,4 @@
-package com.example.iboard.service;
+package com.example.iboard.util;
 
 import org.springframework.http.*;
 import org.springframework.web.multipart.*;

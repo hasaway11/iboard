@@ -4,7 +4,7 @@ import com.example.iboard.dao.*;
 import com.example.iboard.dto.*;
 import com.example.iboard.entity.*;
 import com.example.iboard.exception.*;
-import org.apache.commons.lang3.*;
+import com.example.iboard.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
@@ -25,6 +25,9 @@ public class MemberService {
   }
 
   public Member signup(MemberDto.Create dto) {
+    if(memberDao.existsByUsername(dto.getUsername()))
+      throw new JobFailException("사용중인 아이디입니다");
+
     // 1. 비밀번호 암호화
     String encodedPassword = encoder.encode(dto.getPassword());
     // 2. 프사를 업로드했으면 인코딩, 업로드하지 않았으면 기본 프사를 저장
@@ -44,7 +47,7 @@ public class MemberService {
 
     // 3. 암호화된 비밀번호, base64이미지를 가지고 dto를 member로 변환
     Member member = dto.toEntity(encodedPassword, base64Image);
-    memberDao.save(member);
+    memberDao.insert(member);
     return member;
   }
 

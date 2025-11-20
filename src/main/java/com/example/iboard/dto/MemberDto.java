@@ -1,7 +1,5 @@
 package com.example.iboard.dto;
 
-import com.example.demo.entity.*;
-import com.example.demo.util.validation.*;
 import com.example.iboard.entity.*;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
