@@ -22,10 +22,9 @@ public class MemberDto {
     @Email
     @NotEmpty(message="이메일은 필수입력입니다")
     private String email;
-    private MultipartFile profile;
 
-    public Member toEntity(String encodedPassword, String base64Image) {
-      return new Member(username, encodedPassword, email, base64Image);
+    public Member toEntity(String encodedPassword) {
+      return new Member(username, encodedPassword, email);
     }
   }
 
@@ -34,7 +33,6 @@ public class MemberDto {
   public static class Read {
     private String username;
     private String email;
-    private String profile;
     @JsonFormat(pattern="yyyy년 MM월 dd일")
     private LocalDate joinday;
     // 가입기간

@@ -28,25 +28,8 @@ public class MemberService {
     if(memberDao.existsByUsername(dto.getUsername()))
       throw new JobFailException("사용중인 아이디입니다");
 
-    // 1. 비밀번호 암호화
     String encodedPassword = encoder.encode(dto.getPassword());
-    // 2. 프사를 업로드했으면 인코딩, 업로드하지 않았으면 기본 프사를 저장
-    MultipartFile profile = dto.getProfile();
-    boolean 프사를_업로드_했는가 = profile!=null && !profile.isEmpty();
-    String base64Image = "";
-    try {
-      if(프사를_업로드_했는가) {
-        base64Image = ProfileUtil.getBase64Profile(profile);
-      } else {
-        base64Image = ProfileUtil.getDefaultBase64Profile();
-      }
-    } catch(IOException e) {
-      // 처리 중 오류가 발생했다면 기본 프사로 가입 처리
-      base64Image = ProfileUtil.getDefaultBase64Profile();
-    }
-
-    // 3. 암호화된 비밀번호, base64이미지를 가지고 dto를 member로 변환
-    Member member = dto.toEntity(encodedPassword, base64Image);
+    Member member = dto.toEntity(encodedPassword);
     memberDao.insert(member);
     return member;
   }

@@ -15,19 +15,16 @@ public class Member {
   @JsonIgnore
   private String password;
   private String email;
-  @JsonIgnore
-  private String profile;
   private LocalDate joinDay = LocalDate.now();
 
-  public Member(String username, String password, String email, String profile) {
+  public Member(String username, String password, String email) {
     this.username = username;
     this.password = password;
     this.email = email;
-    this.profile = profile;
   }
 
   public MemberDto.Read toRead() {
     long days = ChronoUnit.DAYS.between(joinDay, LocalDate.now());
-    return new MemberDto.Read(username, email, profile, joinDay, days);
+    return new MemberDto.Read(username, email, joinDay, days);
   }
 }

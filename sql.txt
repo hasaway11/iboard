@@ -14,8 +14,6 @@ create table member (
 	password varchar2(60 char) ,
 	email varchar2(30 char),
 	join_day date,
-	-- 이미지를 base64인코딩해서 저장
-	profile clob,
 	constraint member_pk_username primary key(username)
 );
 
