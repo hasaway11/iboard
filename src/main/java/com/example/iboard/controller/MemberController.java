@@ -49,16 +49,21 @@ public class MemberController {
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/api/members/member")
   public ResponseEntity<MemberDto.Read> read(Principal principal) {
+    String loginId = principal==null? "anonymous" : principal.getName();
+    System.out.println("============================================");
+    System.out.println(loginId);
     MemberDto.Read dto = service.read(principal.getName());
     return ResponseEntity.ok(dto);
   }
 
   @PreAuthorize("isAuthenticated()")
   @PatchMapping("/api/members/password")
-  public ResponseEntity<String> changePassword(@ModelAttribute @Valid MemberDto.PasswordChange dto, Principal principal) {
+  public ResponseEntity<String> changePassword(@ModelAttribute @Valid MemberDto.PasswordChange dto, Principal principal, HttpSession session) {
     boolean result = service.changePassword(dto, principal.getName());
-    if(result)
+    if(result) {
+      session.invalidate();
       return ResponseEntity.ok("비밀번호 변경");
+    }
     return ResponseEntity.status(409).body("비밀번호 변경 실패");
   }
 

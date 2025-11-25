@@ -20,10 +20,10 @@ public interface PostDao {
   @Select("select * from post where pno=#{pno}")
   Optional<Post> findByPno(long pno);
 
-  @Update("update posts set title=#{title}, content=#{content} where pno=#{pno}")
+  @Update("update post set title=#{title}, content=#{content} where pno=#{pno}")
   long update(String title, String content, long pno);
 
-  @Delete("delete from posts where pno=#{pno}")
+  @Delete("delete from post where pno=#{pno}")
   long delete(long pno);
 }
 
