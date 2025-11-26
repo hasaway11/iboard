@@ -16,21 +16,24 @@ public class PostService {
   private PostDao postDao;
   @Autowired
   private CommentDao commentDao;
-  private static final int BLOCK_SIZE = 5;
+  private static final long BLOCK_SIZE = 5;
 
-  public PostDto.Pages findAll(int pageno, int pagesize) {
+  public PostDto.Pages findAll(long pageno, long pagesize) {
     long totalcount = postDao.count();
     List<Post> posts = postDao.findAll(pageno, pagesize);
     return PagingUtil.getPages(pageno, pagesize, BLOCK_SIZE, totalcount, posts);
   }
 
-  public PostDto.Read findByPno(int pno, String loginId) {
+  public PostDto.Read findByPno(long pno, boolean includeComments, String loginId) {
     Post post = postDao.findByPno(pno).orElseThrow(()->new JobFailException("글을 찾을 수 없습니다"));
     if(loginId!=null && !post.getWriter().equals(loginId)) {
       postDao.increaseReadCnt(pno);
       post.increaseReadCnt();
     }
-    List<Comment> comments = commentDao.findByPno(pno);
+
+    List<Comment> comments = null;
+    if(includeComments)
+      comments = commentDao.findByPno(pno);
     return new PostDto.Read(post, comments);
   }
 
@@ -47,7 +50,7 @@ public class PostService {
     postDao.update(dto.getTitle(), dto.getContent(), dto.getPno());
   }
 
-  public void delete(Integer pno, String loginId) {
+  public void delete(long pno, String loginId) {
     Post post = postDao.findByPno(pno).orElseThrow(()->new JobFailException("글을 찾을 수 없습니다"));
     if(!post.getWriter().equals(loginId))
       throw new JobFailException("잘못된 작업있니다");

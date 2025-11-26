@@ -25,9 +25,9 @@ public class PostController {
 
   @Validated
   @GetMapping("/api/posts/post")
-  public ResponseEntity<PostDto.Read> findByPno(@RequestParam(required=false) @NotNull(message="글번호는 필수입력입니다") Integer pno, Principal principal) {
+  public ResponseEntity<PostDto.Read> findByPno(@RequestParam(required=false) @NotNull(message="글번호는 필수입력입니다") Integer pno, @RequestParam(defaultValue="1") boolean includeComments, Principal principal) {
     String loginId = principal==null? null : principal.getName();
-    return ResponseEntity.ok(service.findByPno(pno, loginId));
+    return ResponseEntity.ok(service.findByPno(pno, includeComments, loginId));
   }
 
   @Secured("ROLE_USER")
