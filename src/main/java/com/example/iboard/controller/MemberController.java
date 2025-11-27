@@ -43,15 +43,14 @@ public class MemberController {
   @GetMapping("/api/members/username")
   public ResponseEntity<String> searchUsername(@RequestParam @NotEmpty(message="이메일은 필수입력입니다") @Email(message="이메일을 입력하세요") String email) {
     Optional<String> result = service.findUseraname(email);
-    return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다"));
+    if(result.isPresent())
+      return ResponseEntity.ok(result.get());
+    return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
   }
 
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/api/members/member")
   public ResponseEntity<MemberDto.Read> read(Principal principal) {
-    String loginId = principal==null? "anonymous" : principal.getName();
-    System.out.println("============================================");
-    System.out.println(loginId);
     MemberDto.Read dto = service.read(principal.getName());
     return ResponseEntity.ok(dto);
   }

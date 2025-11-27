@@ -18,11 +18,13 @@ public class PostController {
   @Autowired
   private PostService service;
 
+  // 페이징
   @GetMapping("/api/posts")
   public ResponseEntity<PostDto.Pages> findAll(@RequestParam(defaultValue="1") int pageno, @RequestParam(defaultValue="10") int pagesize) {
     return ResponseEntity.ok(service.findAll(pageno, pagesize));
   }
 
+  // 글 읽기
   @Validated
   @GetMapping("/api/posts/post")
   public ResponseEntity<PostDto.Read> findByPno(@RequestParam(required=false) @NotNull(message="글번호는 필수입력입니다") Integer pno, @RequestParam(defaultValue="1") boolean includeComments, Principal principal) {

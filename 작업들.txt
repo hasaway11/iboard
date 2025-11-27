@@ -1,0 +1,38 @@
+작업 리스트
+1. AuthController
+- GET /api/auth/check
+	로그인이면 아이디와 권한을 응답
+	비로그인이면 409
+
+2. MemberController
+- GET /api/members/check-username
+	사용가능한 아이디면 200, 아니면 409
+- POST /api/members/new
+	MemberDto.Create(username, password, email) 입력받아 회원 가입
+	사용중인 아이디일 경우 JobFailException으로 처리
+- GET /api/members/username
+	이메일을 입력받아 아이디를 찾으면 아이디를, 못찾으면 409를 응답
+- GET /api/members/member
+	내정보 보기
+	로그인한 사용자 정보가 없는 경우  JobFailException으로 처리
+- PATCH 	/api/members/password
+	기존 비밀번호, 새 비밀번호를 MemberDto.PasswordChange로 전달받음
+	기존 비밀번호가 확인 후 새비밀번호로 변경
+	로그아웃 처리해 다시 로그인 요청
+	비밀번호 변경에 실패한 경우 409를 응답
+- DELETE /api/members/member
+	회원 탈퇴 후 로그아웃 처리
+
+3. PostController
+- GET /api/posts
+	페이징
+- GET /api/posts/post : 글 읽기 (글이 없으면 JobFailException)
+- POST /api/posts/new : 글 작성
+- PUT /api/posts/post : 글변경 (글이 없으면 JobFailException)
+- DELETE /api/posts/post : 글 삭제 (글이 없으면 JobFailException)
+
+4. CommentController
+- POST /api/comments/new
+	댓글을 작성하면 글의 댓글들을 응답
+- DELETE /api/comments/new
+	댓글을 삭제하면 글의 댓글들을 응답
