@@ -16,18 +16,17 @@ import java.util.*;
 
 @EnableMethodSecurity(securedEnabled=true)
 @Configuration
-// final로 선언한 필드를 대상으로 하는 생성자를 만들어준다 - 스프링에서 생성자를 이용해 객체를 주입할 때 사용가능
 @RequiredArgsConstructor
 public class SecurityConfig {
-  // 401 오류 처리(로그인이 필요하다)
+  // 로그인이 필요한 경우 처리 : 기본값은 로그인 페이지로 이동이지만 REST 방식이므로 401을 응답 -> 프론트가 알아서 처리
   private final AuthenticationEntryPoint authenticationEntryPoint;
-  // 403 오류 처리(권한 오류)
+  // 권한이 필요한 경우 처리 : 기본값은 에러 페이지를 보여주는 거지만 REST 방식이므로 403을 응답 -> 프론트가 알아서 처리
   private final AccessDeniedHandler accessDeniedHandler;
-  // 로그인 성공 - 200으로 응답
+  // 로그인 성공에 대한 처리 - 200으로 응답
   private final AuthenticationSuccessHandler authenticationSuccessHandler;
-  // 로그인 실패 - 409로 응답
+  // 로그인 실패에 대한 처리 - 409로 응답
   private final AuthenticationFailureHandler authenticationFailureHandler;
-  // 로그아웃 성공 - 200으로 응답
+  // 로그아웃 성공에 대한 처리 - 200으로 응답
   private final LogoutSuccessHandler logoutSuccessHandler;
 
   @Bean
@@ -37,6 +36,7 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity config) throws Exception {
+    // 아래 52라인에서 생성한 CORS 설정을 등록
     config.cors(cors->cors.configurationSource(corsConfigurationSource()));
     config.csrf(csrf-> csrf.disable());
 
@@ -48,7 +48,7 @@ public class SecurityConfig {
     return config.build();
   }
 
-  // ajax 요청에 대한 CORS 필터
+  // ajax 요청에 대한 CORS 설정
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
